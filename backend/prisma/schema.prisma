@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id           Int       @id @default(autoincrement())
+  name         String
+  endereco     String    @db.Text
+  contato      String?
+  email        String    @unique
+  senha        String
+  status       Status    @default(ativo)
+  cadastradoEm DateTime
+  dataCriado   DateTime  @default(now())
+  Empresa      Empresa[]
+}
+
+model Empresa {
+  id           Int        @id @default(autoincrement())
+  usuarioId    Int
+  Usuario      Usuario    @relation(references: [id], fields: [usuarioId])
+  nome         String
+  descricao    String?    @db.Text
+  endereco     String     @db.Text
+  avaliacao    Int        @default(0)
+  perfil       String     @default("default.png")
+  status       Status     @default(ativo)
+  cadastradoEm DateTime
+  dataCriadio  DateTime   @default(now())
+  Produtos     Produtos[]
+}
+
+enum Status {
+  ativo
+  inativo
+}
+
+model Produtos {
+  id              Int       @id @default(autoincrement())
+  empresaId       Int
+  Empresa         Empresa   @relation(references: [id], fields: [empresaId])
+  nome            String
+  descricao       String?   @db.Text
+  preco           Float     @db.Double
+  estoque         Float     @default(0)
+  monitorar       Boolean   @default(true)
+  exibir          Boolean   @default(true)
+  imagem          String    @default("default_produto.png")
+  categoria       String
+  dataCriado      DateTime  @default(now())
+  dataUltimaSaida DateTime?
+}
