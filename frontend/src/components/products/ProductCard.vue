@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { StarIcon } from '@heroicons/vue/24/solid';
-import { ShoppingCartIcon } from '@heroicons/vue/24/outline';
-import type { Product } from '../../types';
-import { useCart } from '../../composables/useCart';
-import ProductModal from './ProductModal.vue';
+import { ref } from 'vue'
+import { StarIcon } from '@heroicons/vue/24/solid'
+import { ShoppingCartIcon } from '@heroicons/vue/24/outline'
+import type { Product } from '../../types'
+import { useCartStore } from '../../stores/cartStore'
+import ProductModal from './ProductModal.vue'
 
 const props = defineProps<{
-  product: Product;
-}>();
+  product: Product
+}>()
 
-const showModal = ref(false);
-const { addToCart } = useCart();
+const showModal = ref(false)
+const cartStore = useCartStore()
 
 const handleAddToCart = (e: Event) => {
-  e.stopPropagation();
-  addToCart(props.product);
-};
+  e.stopPropagation()
+  cartStore.addToCart(props.product)
+}
 </script>
 
 <template>

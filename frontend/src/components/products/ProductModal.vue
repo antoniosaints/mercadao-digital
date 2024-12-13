@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { StarIcon, MapPinIcon, PhoneIcon } from '@heroicons/vue/24/solid';
-import { ShoppingCartIcon } from '@heroicons/vue/24/outline';
-import type { Product } from '../../types';
-import Modal from '../ui/Modal.vue';
-import { useCart } from '../../composables/useCart';
+import { StarIcon, MapPinIcon, UserCircleIcon } from '@heroicons/vue/24/solid'
+import { ShoppingCartIcon } from '@heroicons/vue/24/outline'
+import type { Product } from '../../types'
+import Modal from '../ui/Modal.vue'
+import { useCartStore } from '../../stores/cartStore'
 
 const props = defineProps<{
-  show: boolean;
-  product: Product;
-}>();
+  show: boolean
+  product: Product
+}>()
 
 const emit = defineEmits<{
-  (e: 'close'): void;
-}>();
+  (e: 'close'): void
+}>()
 
-const { addToCart } = useCart();
+const cartStore = useCartStore()
 
 const handleAddToCart = () => {
-  addToCart(props.product);
-};
+  cartStore.addToCart(props.product)
+}
 </script>
 
 <template>
@@ -52,6 +52,10 @@ const handleAddToCart = () => {
         <div class="border-t border-gray-700 pt-4">
           <h3 class="text-lg font-semibold text-yellow-500 mb-2">Informações da Loja</h3>
           <div class="space-y-2">
+            <div class="flex items-center gap-2">
+              <UserCircleIcon class="w-5 h-5 text-yellow-500" />
+              <span class="text-gray-300">{{ product.shop.name }}</span>
+            </div>
             <div class="flex items-center gap-2">
               <StarIcon class="w-5 h-5 text-yellow-500" />
               <span class="text-gray-300">{{ product.shop.rating }} estrelas</span>

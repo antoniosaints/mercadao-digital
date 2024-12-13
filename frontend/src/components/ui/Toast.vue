@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { CheckCircleIcon, XCircleIcon, InformationCircleIcon } from '@heroicons/vue/24/outline';
-import { useToast } from '../../composables/useToast';
+import { CheckCircleIcon, XCircleIcon, InformationCircleIcon } from '@heroicons/vue/24/outline'
+import { useToastStore } from '../../stores/toastStore'
+import { storeToRefs } from 'pinia'
 
-const { toasts, removeToast } = useToast();
+const toastStore = useToastStore()
+const { toasts } = storeToRefs(toastStore)
 
 const getIcon = (type: string) => {
   switch (type) {
-    case 'success': return CheckCircleIcon;
-    case 'error': return XCircleIcon;
-    default: return InformationCircleIcon;
+    case 'success': return CheckCircleIcon
+    case 'error': return XCircleIcon
+    default: return InformationCircleIcon
   }
-};
+}
 </script>
 
 <template>
@@ -28,7 +30,7 @@ const getIcon = (type: string) => {
       <component :is="getIcon(toast.type)" class="w-5 h-5 text-white" />
       <span class="text-white">{{ toast.message }}</span>
       <button
-        @click="removeToast(toast.id)"
+        @click="toastStore.remove(toast.id)"
         class="ml-2 text-white hover:text-gray-200"
       >
         ×

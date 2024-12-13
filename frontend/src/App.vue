@@ -1,18 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import Header from './components/layout/Header.vue';
-import SearchBar from './components/search/SearchBar.vue';
-import ProductGrid from './components/products/ProductGrid.vue';
-import CartPage from './components/cart/CartPage.vue';
-import Toast from './components/ui/Toast.vue';
-import { useSearch } from './composables/useSearch';
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import Header from './components/layout/Header.vue'
+import SearchBar from './components/search/SearchBar.vue'
+import ProductGrid from './components/products/ProductGrid.vue'
+import CartPage from './components/cart/CartPage.vue'
+import Toast from './components/ui/Toast.vue'
+import { useProductStore } from './stores/productStore'
 
-const showCart = ref(false);
-const { filteredProducts, updateSearch } = useSearch();
+const showCart = ref(false)
+const productStore = useProductStore()
+const { filteredProducts } = storeToRefs(productStore)
 
 const handleSearch = (query: string) => {
-  updateSearch({ query });
-};
+  productStore.updateSearch({ query })
+}
 </script>
 
 <template>

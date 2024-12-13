@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ShoppingBagIcon, UserCircleIcon } from '@heroicons/vue/24/outline';
-import { useCart } from '../../composables/useCart';
+import { useCartStore } from '../../stores/cartStore';
+import { storeToRefs } from 'pinia';
+const cartStore = useCartStore()
 
+const { totalItems } = storeToRefs(cartStore)
 const emit = defineEmits<{
   (e: 'toggle-cart'): void;
 }>();
 
-const { totalItems } = useCart();
 </script>
 
 <template>

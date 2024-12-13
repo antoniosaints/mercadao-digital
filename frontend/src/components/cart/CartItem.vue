@@ -1,16 +1,22 @@
 <script setup lang="ts">
-import { TrashIcon } from '@heroicons/vue/24/outline';
-import type { Product } from '../../types';
+import { TrashIcon } from '@heroicons/vue/24/outline'
+import type { Product } from '../../types'
+import { useCartStore } from '../../stores/cartStore'
 
 const props = defineProps<{
-  product: Product;
-  quantity: number;
-}>();
+  product: Product
+  quantity: number
+}>()
 
-const emit = defineEmits<{
-  (e: 'update:quantity', quantity: number): void;
-  (e: 'remove'): void;
-}>();
+const cartStore = useCartStore()
+
+const handleRemove = () => {
+  cartStore.removeFromCart(props.product.id)
+}
+
+const handleQuantityChange = (newQuantity: number) => {
+  cartStore.updateQuantity(props.product.id, newQuantity)
+}
 </script>
 
 <template>
@@ -21,16 +27,23 @@ const emit = defineEmits<{
       <p class="text-gray-400 text-sm">{{ product.shop.name }}</p>
       <div class="flex items-center gap-4 mt-2">
         <div class="flex items-center gap-2">
-          <button @click="emit('update:quantity', quantity - 1)"
-            class="px-3 py-1 bg-gray-700 font-bold text-yellow-500 rounded hover:bg-gray-600">-</button>
+          <button 
+            @click="handleQuantityChange(quantity - 1)"
+            class="px-2 py-1 bg-gray-700 text-yellow-500 rounded hover:bg-gray-600"
+          >-</button>
           <span class="text-gray-300">{{ quantity }}</span>
-          <button @click="emit('update:quantity', quantity + 1)"
-            class="px-3 py-1 bg-gray-700 font-bold text-yellow-500 rounded hover:bg-gray-600">+</button>
+          <button 
+            @click="handleQuantityChange(quantity + 1)"
+            class="px-2 py-1 bg-gray-700 text-yellow-500 rounded hover:bg-gray-600"
+          >+</button>
         </div>
-        <span class="text-yellow-500">{{ (product.price * quantity).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span>
+        <span class="text-yellow-500">R$ {{ (product.price * quantity).toFixed(2) }}</span>
       </div>
     </div>
-    <button @click="emit('remove')" class="p-2 text-gray-400 hover:text-yellow-500">
+    <button 
+      @click="handleRemove"
+      class="p-2 text-gray-400 hover:text-yellow-500"
+    >
       <TrashIcon class="w-5 h-5" />
     </button>
   </div>

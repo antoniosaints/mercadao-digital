@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { useCart } from '../../composables/useCart';
-import CartItem from './CartItem.vue';
+import { storeToRefs } from 'pinia'
+import { useCartStore } from '../../stores/cartStore'
+import CartItem from './CartItem.vue'
 
-const { cartItems, totalItems, totalPrice, updateQuantity, removeFromCart } = useCart();
+const cartStore = useCartStore()
+// Use storeToRefs to maintain reactivity
+const { cartItems, totalItems, totalPrice } = storeToRefs(cartStore)
 </script>
 
 <template>
@@ -21,15 +24,13 @@ const { cartItems, totalItems, totalPrice, updateQuantity, removeFromCart } = us
             :key="item.product.id"
             :product="item.product"
             :quantity="item.quantity"
-            @update:quantity="qty => updateQuantity(item.product.id, qty)"
-            @remove="removeFromCart(item.product.id)"
           />
         </div>
         
         <div class="mt-8 border-t border-gray-700 pt-4">
           <div class="flex justify-between items-center mb-4">
-            <span class="text-gray-400 text-xl">Total</span>
-            <span class="text-2xl font-bold text-yellow-500">{{ totalPrice.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }}</span>
+            <span class="text-gray-400">Total</span>
+            <span class="text-2xl font-bold text-yellow-500">R$ {{ totalPrice.toFixed(2) }}</span>
           </div>
           
           <button class="w-full py-3 bg-yellow-500 text-gray-900 rounded-lg font-medium hover:bg-yellow-400">
